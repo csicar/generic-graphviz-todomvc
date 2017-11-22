@@ -39,7 +39,7 @@ match url = fromMaybe (NotFound url) $ router url $
   Completed <$ (lit "completed") <* end
 
 toURL :: Route -> String
-toURL All = "/"
-toURL Active = "/active"
-toURL Completed = "/completed"
+toURL All = "./"
+toURL Active = "./active"
+toURL Completed = "./completed"
 toURL (NotFound url) = url
