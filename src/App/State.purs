@@ -4,6 +4,9 @@ import App.Config (config)
 import App.Routes (Route, match, toURL)
 import Control.Applicative (pure)
 import Control.Bind (bind)
+import Data.Generic.Rep (class Generic)
+import Data.DotLang (class GraphRepr)
+import Data.GenericGraph (class Edges, genericEdges, genericToGraph)
 import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, jsonEmptyObject, (.?), (:=), (~>))
 import Data.Function (($))
 
@@ -57,6 +60,15 @@ instance encodeJsonTodo :: EncodeJson Todo where
     ~> "completed" := todo.completed
     ~> "editing" := todo.editing
     ~> jsonEmptyObject
+
+derive instance genericTodo :: Generic Todo _
+instance graphReprTodo :: GraphRepr Todo where toGraph = genericToGraph
+instance edgesTodo :: Edges Todo where edges = genericEdges
+
+
+derive instance genericState :: Generic State _
+instance graphReprState :: GraphRepr State where toGraph = genericToGraph
+instance edgesState :: Edges State where edges = genericEdges
 
 init :: String -> State
 init url = State

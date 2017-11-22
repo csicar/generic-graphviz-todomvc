@@ -6,11 +6,14 @@ import App.State (State(..), Todo(..))
 import App.Events (Event(..))
 import Data.Array (filter, length)
 import Data.Foldable (for_)
+import Data.GenericGraph (genericToGraph)
+import Global (encodeURIComponent)
+import Graphics.Graphviz (Engine(..), renderToSvg)
 import Pux.DOM.Events (onClick, onChange, onDoubleClick, onKeyPress)
 import Pux.DOM.HTML (HTML, memoize)
 import Pux.DOM.HTML.Attributes (focused, key)
-import Text.Smolder.HTML (a, button, div, footer, h1, header, input, label, li, p, section, span, strong, ul)
-import Text.Smolder.HTML.Attributes (checked, className, for, href, placeholder, type', value)
+import Text.Smolder.HTML (a, button, div, footer, h1, header, input, label, li, p, section, span, strong, ul, img)
+import Text.Smolder.HTML.Attributes (checked, className, for, href, placeholder, type', value, src)
 import Text.Smolder.Markup ((!), (!?), (#!), text)
 
 item :: Todo -> HTML Event
@@ -38,9 +41,19 @@ item = memoize \(Todo todo) ->
             ! className "destroy"
             $ text ""
 
+
+
 view :: State -> HTML Event
-view (State st) =
+view st =
   div do
+    img
+      ! className "graphviz"
+      ! src ("data:image/svg+xml;charset=utf8," <> (encodeURIComponent $ renderToSvg Dot $ genericToGraph st))
+    viewContent st
+
+viewContent :: State -> HTML Event
+viewContent (State st) =
+  div ! className "content" $ do
     let filtered = case st.route of
                      Active -> flip filter st.todos \(Todo t) -> not t.completed
                      Completed -> flip filter st.todos \(Todo t) -> t.completed
