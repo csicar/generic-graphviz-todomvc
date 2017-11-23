@@ -14,5 +14,8 @@
     "purescript-affjax": "^4.0.0",
     "purescript-argonaut": "^3.0.0",
     "purescript-generic-graphviz": "git@github.com:csicar/purescript-generic-graphviz.git"
+  },
+  "resolutions": {
+    "purescript-aff": "^3.0.0"
   }
 }

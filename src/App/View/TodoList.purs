@@ -9,6 +9,7 @@ import Data.Foldable (for_)
 import Data.GenericGraph (genericToGraph)
 import Global (encodeURIComponent)
 import Graphics.Graphviz (Engine(..), renderToSvg)
+import Graphics.ConsoleImage (consoleImage, consoleSvgToPngImage)
 import Pux.DOM.Events (onClick, onChange, onDoubleClick, onKeyPress)
 import Pux.DOM.HTML (HTML, memoize)
 import Pux.DOM.HTML.Attributes (focused, key)
@@ -48,7 +49,9 @@ view st =
   div do
     img
       ! className "graphviz"
-      ! src ("data:image/svg+xml;charset=utf8," <> (encodeURIComponent $ renderToSvg Dot $ genericToGraph st))
+      ! let a = consoleSvgToPngImage 0.7 (renderToSvg Dot $ genericToGraph st)
+        in src ("data:image/svg+xml;charset=utf8," <> (encodeURIComponent $ renderToSvg Dot $ genericToGraph st))
+
     viewContent st
 
 viewContent :: State -> HTML Event
