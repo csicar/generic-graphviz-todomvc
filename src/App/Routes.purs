@@ -41,7 +41,7 @@ match url' =
   <|>
   Completed <$ (lit "completed") <* end
   where
-    url = fromMaybe url' $ last $ split (Pattern "/") url'
+    url = "/"
 
 toURL :: Route -> String
 toURL All = "./"
